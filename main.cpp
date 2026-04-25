@@ -78,7 +78,8 @@ int main() {
                         valid_iterator = false;
                         std::cout << "-1\n";
                     } else {
-                        std::cout << *prev_it << "\n";
+                        current_it = prev_it;
+                        std::cout << *current_it << "\n";
                     }
                 } else {
                     std::cout << "-1\n";
@@ -94,6 +95,7 @@ int main() {
                         valid_iterator = false;
                         std::cout << "-1\n";
                     } else {
+                        ++current_it;
                         std::cout << *current_it << "\n";
                     }
                 } else {
