@@ -72,10 +72,14 @@ int main() {
             }
             case 5: {
                 // Predecessor of current iterator
-                if (valid_iterator && current_it != sets[current_set_idx].begin()) {
+                if (valid_iterator) {
                     auto prev_it = current_it;
-                    --prev_it;
-                    std::cout << *prev_it << "\n";
+                    if (current_it == --prev_it) {
+                        valid_iterator = false;
+                        std::cout << "-1\n";
+                    } else {
+                        std::cout << *prev_it << "\n";
+                    }
                 } else {
                     std::cout << "-1\n";
                 }
@@ -83,13 +87,14 @@ int main() {
             }
             case 6: {
                 // Successor of current iterator
-                if (valid_iterator && current_it != sets[current_set_idx].end()) {
+                if (valid_iterator) {
                     auto next_it = current_it;
                     ++next_it;
-                    if (next_it != sets[current_set_idx].end()) {
-                        std::cout << *next_it << "\n";
-                    } else {
+                    if (current_it == ++next_it) {
+                        valid_iterator = false;
                         std::cout << "-1\n";
+                    } else {
+                        std::cout << *current_it << "\n";
                     }
                 } else {
                     std::cout << "-1\n";
