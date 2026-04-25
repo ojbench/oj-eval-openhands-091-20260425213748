@@ -1,10 +1,7 @@
 
 #include <iostream>
 #include <unordered_set>
-#include <vector>
 #include <string>
-#include <chrono>
-#include <algorithm>
 
 int main() {
     std::ios::sync_with_stdio(false);
@@ -12,8 +9,6 @@ int main() {
     
     std::unordered_set<long long> eset;
     std::string command;
-    
-    auto start_time = std::chrono::high_resolution_clock::now();
     
     while (std::cin >> command) {
         if (command == "insert") {
