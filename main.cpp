@@ -1,46 +1,97 @@
 
 #include <iostream>
-#include <unordered_set>
-#include <string>
+#include <set>
+#include <vector>
 
 int main() {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     
-    std::unordered_set<long long> eset;
-    std::string command;
+    // We'll maintain 25 sets as indicated in the reference implementation
+    std::vector<std::set<long long>> sets(25);
+    std::set<long long>::iterator current_it;
+    int current_set_idx = -1;
+    bool valid_iterator = false;
+    int lst = 0;
     
-    while (std::cin >> command) {
-        if (command == "insert") {
-            long long value;
-            std::cin >> value;
-            eset.insert(value);
-        } else if (command == "find") {
-            long long value;
-            std::cin >> value;
-            if (eset.find(value) != eset.end()) {
-                std::cout << "true\n";
-            } else {
-                std::cout << "false\n";
+    int op;
+    while (std::cin >> op) {
+        long long a, b, c;
+        switch (op) {
+            case 0: {
+                std::cin >> a >> b;
+                auto result = sets[a].insert(b);
+                if (result.second) {  // Element was inserted (not already present)
+                    current_set_idx = a;
+                    current_it = result.first;
+                    valid_iterator = true;
+                }
+                break;
             }
-        } else if (command == "delete") {
-            long long value;
-            std::cin >> value;
-            eset.erase(value);
-        } else if (command == "clear") {
-            eset.clear();
-        } else if (command == "size") {
-            std::cout << eset.size() << "\n";
-        } else if (command == "empty") {
-            std::cout << (eset.empty() ? "true" : "false") << "\n";
-        } else if (command == "iterate") {
-            // For speed test, we just iterate without outputting all elements
-            // to avoid overwhelming output
-            long long sum = 0;
-            for (const auto& val : eset) {
-                sum += val;
+            case 1: {
+                std::cin >> a >> b;
+                // Invalidate iterator if it points to the element being deleted
+                if (valid_iterator && current_set_idx == a) {
+                    if (current_it != sets[a].end() && *current_it == b) {
+                        valid_iterator = false;
+                    }
+                }
+                sets[a].erase(b);
+                break;
             }
-            std::cout << sum << "\n";
+            case 2: {
+                std::cin >> a;
+                lst++;
+                sets[lst] = sets[a];  // Copy set a to set lst
+                break;
+            }
+            case 3: {
+                std::cin >> a >> b;
+                auto it = sets[a].find(b);
+                if (it != sets[a].end()) {
+                    std::cout << "true\n";
+                    current_set_idx = a;
+                    current_it = it;
+                    valid_iterator = true;
+                } else {
+                    std::cout << "false\n";
+                }
+                break;
+            }
+            case 4: {
+                std::cin >> a >> b >> c;
+                // Count elements in range [b, c]
+                auto start = sets[a].lower_bound(b);
+                auto end = sets[a].upper_bound(c);
+                std::cout << std::distance(start, end) << "\n";
+                break;
+            }
+            case 5: {
+                // Predecessor of current iterator
+                if (valid_iterator && current_it != sets[current_set_idx].begin()) {
+                    auto prev_it = current_it;
+                    --prev_it;
+                    std::cout << *prev_it << "\n";
+                } else {
+                    std::cout << "-1\n";
+                }
+                break;
+            }
+            case 6: {
+                // Successor of current iterator
+                if (valid_iterator && current_it != sets[current_set_idx].end()) {
+                    auto next_it = current_it;
+                    ++next_it;
+                    if (next_it != sets[current_set_idx].end()) {
+                        std::cout << *next_it << "\n";
+                    } else {
+                        std::cout << "-1\n";
+                    }
+                } else {
+                    std::cout << "-1\n";
+                }
+                break;
+            }
         }
     }
     
