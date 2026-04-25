@@ -7,6 +7,10 @@ int main() {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     
+    // Read the first line which contains initialization parameters
+    long long init_a, init_b, init_c;
+    std::cin >> init_a >> init_b >> init_c;
+    
     // We'll maintain 25 sets as indicated in the reference implementation
     std::vector<std::set<long long>> sets(25);
     std::set<long long>::iterator current_it;
